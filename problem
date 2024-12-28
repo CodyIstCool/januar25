@@ -1,0 +1,78 @@
+                <li class="dropdown">
+                    <img src="profilbild.jpg" class="profilbild">
+                    <ul class="dropdown-menu versteckt">
+                        <li><a href="profile.html">Profil</a></li>
+                        <li><a href="settings.html">Einstellungen</a></li>
+                        <hr>
+                        <li><a href="logout.html">Abmelden</a></li>
+                    </ul>
+                </li>
+
+<script>
+const TOGGLE = document.querySelector('button.sidebar-toggle'); // Stelle sicher, dass der Button korrekt ausgewählt wird
+const sidebar = document.querySelector('.sidebar'); // Stelle sicher, dass die Sidebar korrekt ausgewählt wird
+
+const HANDLE_TOGGLE = () => {
+    console.log("Button clicked"); // Debugging
+    if (!TOGGLE || !sidebar) return;
+
+    const isPressed = TOGGLE.matches('[aria-pressed=true]');
+    TOGGLE.setAttribute('aria-pressed', isPressed ? "false" : "true");
+    sidebar.classList.toggle('visible', !isPressed);
+    sidebar.classList.toggle('versteckt', isPressed);
+};
+
+if (TOGGLE) {
+    TOGGLE.addEventListener('click', HANDLE_TOGGLE);
+}
+</script>
+<style>
+    .sidebar {
+    position: fixed;
+    top: 0;
+    left: -300px; /* Standardposition außerhalb des Bildschirms */
+    width: 300px;
+    height: 100vh;
+    background-color: hsl(0, 0%, 16%);
+    color: white;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    transition: left 0.3s ease; /* Animation für das Ausfahren */
+}
+
+.sidebar.visible {
+    left: 0; /* Sidebar sichtbar */
+}
+
+.sidebar.versteckt {
+    left: -300px; /* Sidebar versteckt */
+}
+
+/* Button-Stil: Standardposition links oben */
+button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    transition: left 0.3s ease; /* Animation für die Bewegung nach rechts */
+}
+
+/* Button-Stil: Wenn die Seitenleiste sichtbar ist */
+.sidebar.visible + button {
+    left: 320px; /* Position rechts von der Seitenleiste (300px Breite + 20px Abstand) */
+}
+
+button {
+    width: 50px; /* Kleinere Breite */
+    height: 50px; /* Feste Höhe für kleinere Größe */
+    aspect-ratio: unset; /* Deaktiviert das quadratische Verhältnis */
+    display: grid;
+    place-items: center;
+    padding: 0;
+    scale: 1;
+    background: hsl(0 0% 16%);
+    border: 0;
+    border-radius: 50%;
+    transition: background 0.2s;
+    cursor: pointer;
+}
+</style>

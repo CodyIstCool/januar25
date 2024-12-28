@@ -1,0 +1,450 @@
+/* Global Styles */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Roboto, sans-serif;
+    list-style: none;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0; /* Entferne Browser-Standardabstände */
+    padding: 0; /* Entferne Standardabstände */
+}
+
+nav {
+    width: 100%; /* Optional, falls Navigation horizontal zentriert bleiben soll */
+    margin-top: 21px;
+    margin-left: 21px;
+}
+
+nav ul {
+    display: flex;
+    gap: 20px; /* Abstand zwischen Navigationselementen */
+}
+
+a {
+    text-decoration: none;
+    position: relative;
+}
+
+a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px; /* Dicke der Unterstreichung */
+    background-color: red;
+    transition: width 0.3s ease;
+}
+
+a:hover::after, a:focus::after {
+    width: 25%; /* Unterstreicht den gesamten Textinhalt */
+}
+
+/* Button Styles */
+button {
+    width: 50px; /* Kleinere Breite */
+    height: 50px; /* Feste Höhe für kleinere Größe */
+    aspect-ratio: unset; /* Deaktiviert das quadratische Verhältnis */
+    display: grid;
+    place-items: center;
+    padding: 0;
+    scale: 1;
+    background: hsl(0 0% 16%);
+    border: 0;
+    border-radius: 50%;
+    transition: background 0.2s;
+    cursor: pointer;
+}
+
+button svg:first-of-type {
+    width: 60%; /* Reduziert die Größe des SVGs */
+}
+
+button rect {
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+    fill: hsl(0 0% 98%);
+}
+
+.unset rect {
+    transform-box: unset;
+}
+
+[aria-pressed=true] rect { 
+    transition: translate 0.2s, rotate 0.2s 0.3s;
+}
+
+rect {
+    transition: rotate 0.2s 0s, translate 0.2s 0.2s;
+}
+
+[aria-pressed=true] rect:nth-of-type(1) {
+    translate: 0 333%;
+    rotate: -45deg;
+}
+
+[aria-pressed=true] rect:nth-of-type(2) {
+    rotate: 45deg;
+}
+
+[aria-pressed=true] rect:nth-of-type(3) {
+    translate: 0 -333%;
+    rotate: 45deg;
+}
+
+[aria-pressed=true] svg {
+    rotate: 90deg;
+    transition: rotate 1s 0.4s;
+}
+
+@supports (--custom: linear()) {
+    :root {
+        --elastic-out: linear(
+            0, 0.2178 2.1%, 1.1144 8.49%,
+            1.2959 10.7%, 1.3463 11.81%,
+            1.3705 12.94%, 1.3726, 1.3643 14.48%,
+            1.3151 16.2%, 1.0317 21.81%,
+            0.941 24.01%, 0.8912 25.91%,
+            0.8694 27.84%, 0.8698 29.21%,
+            0.8824 30.71%, 1.0122 38.33%, 1.0357,
+            1.046 42.71%, 1.0416 45.7%,
+            0.9961 53.26%, 0.9839 57.54%,
+            0.9853 60.71%, 1.0012 68.14%,
+            1.0056 72.24%, 0.9981 86.66%, 1
+        );
+        --elastic-in-out: linear(
+            0, 0.0009 8.51%, -0.0047 19.22%,
+            0.0016 22.39%, 0.023 27.81%,
+            0.0237 30.08%, 0.0144 31.81%,
+            -0.0051 33.48%, -0.1116 39.25%,
+            -0.1181 40.59%, -0.1058 41.79%, -0.0455,
+            0.0701 45.34%, 0.9702 55.19%,
+            1.0696 56.97%, 1.0987 57.88%,
+            1.1146 58.82%, 1.1181 59.83%,
+            1.1092 60.95%, 1.0057 66.48%,
+            0.986 68.14%, 0.9765 69.84%,
+            0.9769 72.16%, 0.9984 77.61%,
+            1.0047 80.79%, 0.9991 91.48%, 1
+        );
+    }
+
+    [aria-pressed=true] svg {
+        transition-timing-function: var(--elastic-out);
+    }
+}
+
+.controls {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    gap: 1rem;
+    color: hsl(0 0% 98%);
+    accent-color: hsl(0 0% 100%);
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -300px; /* Standardposition außerhalb des Bildschirms */
+    width: 300px;
+    height: 100vh;
+    background-color: hsl(0, 0%, 16%);
+    color: white;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    transition: left 0.3s ease; /* Animation für das Ausfahren */
+}
+
+.sidebar.visible {
+    left: 0; /* Sidebar sichtbar */
+}
+
+.sidebar.versteckt {
+    left: -300px; /* Sidebar versteckt */
+}
+
+/* Button-Stil: Standardposition links oben */
+button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    transition: left 0.3s ease; /* Animation für die Bewegung nach rechts */
+}
+
+/* Button-Stil: Wenn die Seitenleiste sichtbar ist */
+.sidebar.visible + button {
+    left: 320px; /* Position rechts von der Seitenleiste (300px Breite + 20px Abstand) */
+}
+
+.links-left{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    margin-top: 11px;
+    margin-left: 21px;
+    text-decoration: none;
+    color: white;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap');
+.input-group {
+    position: relative;
+    margin: 20px 0;
+}
+
+.input-group {
+    position: relative;
+    width: 250px; /* Breite des Input-Felds */
+    height: 40px; /* Höhe des Input-Felds */
+    margin-left: 500px;
+    margin-top: 10px;
+}
+
+.input-group input {
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+    color: red;
+    padding: 0 40px 0 30px; /* Platz für die Lupe reservieren */
+    background: transparent url('lupe.png') no-repeat center center;
+    background-position: 90%;
+    background-size: 20px 20px; /* Passe die Größe der Lupe an */
+    border: 1.8px solid black;
+    border-radius: 20px;
+    outline: none;
+}
+
+.input-group label {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: black;
+    pointer-events: none;
+    transition: 0.5s;
+}
+
+.input-group input:focus ~ label,
+.input-group input:valid ~ label {
+    top: 0;
+    font-size: 12px;
+    background: white;
+    border-color: black;
+}
+
+.profilbild{
+    display: flex;
+    justify-content: flex-end;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-left: 470px;
+    margin-top: 10px;
+    border: 1px solid black;
+}
+
+.dropdown {
+    position: relative;
+    z-index: 1000; /* Ensure dropdown is above other elements */
+}
+
+.profilbild,
+.dropdown:hover{
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 90px; /* Platz unter dem Profilbild */
+    right: 0;
+    width: 150px; /* Breite des Dropdowns */
+    background-color: hsl(0, 0%, 16%);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    display: none; /* Standardmäßig ausgeblendet */
+    z-index: 10;
+    animation: fadeIn 0.3s ease; /* Fading Effekt */
+}
+
+.dropdown-menu.sichtbar {
+    display: block; /* Einblenden bei Hover */
+}
+
+.dropdown-menu.versteckt {
+    display: none;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 10px 15px;
+    color: white;
+    text-decoration: none;
+}
+
+.dropdown-menu a:hover {
+    background-color: hsl(0, 0%, 16%);
+}
+
+.dropdown-menu hr {
+    margin: 0;
+    border: 0;
+    border-top: 1px solid #ccc;
+}
+
+.versteckt {
+    display: none;
+}
+
+.sichtbar {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+.post-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 46px;
+    padding: 16px;
+    background-color: white;
+    justify-content: center; /* Zentriert die Posts horizontal */
+    align-items: start; /* Falls erforderlich: vertikale Ausrichtung */
+    margin: 0 auto; /* Zentriert das Grid innerhalb der Seite */
+    max-width: 1000px; /* Optionale Begrenzung der Breite */
+    margin-left: 320px;
+    margin-top: 20px;
+}
+
+.post {
+    background-color: #fff;
+    border: 1px solid #dbdbdb;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.post.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #dbdbdb;
+    background-color: #fff;
+}
+
+.post-header p {
+    font-size: 14px;
+    font-weight: bold;
+    color: #262626;
+    margin: 0;
+}
+
+.post-image {
+    width: 100%;
+    margin-bottom: 20px;
+    padding-bottom: 100%; /* Hält das Bild quadratisch */
+    background-size: cover;
+    background-position: center;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.post-image.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.post-footer {
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    border-top: 1px solid #dbdbdb;
+}
+
+.post-footer .icons {
+    display: flex;
+    gap: 10px;
+}
+
+.post-footer .icons svg {
+    width: 20px;
+    height: 20px;
+    fill: #262626;
+    cursor: pointer;
+}
+
+.post-footer .icons svg:hover {
+    fill: #000;
+}
+
+.description {
+    padding: 10px;
+    background-color: #fff;
+    font-size: 14px;
+    color: #262626;
+    line-height: 1.5;
+    border-top: 1px solid #dbdbdb;
+}
+
+/* Beispiel Symbole für Kommentare und Teilen */
+.icon-comment {
+    background: url('comment.svg') no-repeat center center;
+    width: 20px;
+    height: 20px;
+}
+
+.icon-share {
+    background: url('share.svg') no-repeat center center;
+    width: 20px;
+    height: 20px;
+}
+
+.icon-save {
+    background: url('save.svg') no-repeat center center;
+    width: 20px;
+    height: 20px;
+}
+
+.icon-like {
+    background: url('like.svg') no-repeat center center;
+    width: 20px;
+    height: 20px;
+}
